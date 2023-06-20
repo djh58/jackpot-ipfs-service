@@ -1,3 +1,6 @@
+# add'l files to ignore
+out
+
 # Logs
 logs
 *.log
