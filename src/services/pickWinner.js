@@ -1,10 +1,9 @@
 import fs from 'fs';
 import path from 'path';
-import {client, connect, close} from './db/mongoClient.js';
-import { updateDrawing } from './db/drawing.js';
+import { updateDrawing } from '../db/drawing.js';
 // given a rawUint256 random number as BigNumber and a local path, find the winner
 // and return the winner's address
-function pickWinner(rawUintBigInt, localPath, drawing_id) {
+export async function pickWinner(rawUintBigInt, vrfRequestIdBigInt, localPath, drawing_id) {
     // read in the formattedWallets.json file
     const formattedWalletsPath = path.join(localPath, 'formattedWallets.json');
     const formattedWallets = JSON.parse(fs.readFileSync(formattedWalletsPath, 'utf8'));
@@ -31,24 +30,13 @@ function pickWinner(rawUintBigInt, localPath, drawing_id) {
         const upperBigInt = BigInt(wallet.upper)
         if (lowerBigInt <= winningTicket && winningTicket <= upperBigInt) {
             console.log(`winner found: ${wallet.address} ${id}`);
-            // save id and address into file at that path called winner.json
-            const winnerPath = path.join(localPath, 'winner.json');
-            const winData = {
-                id, 
-                address: wallet.address,
-                winningNumber: winningTicket.toString(),
-                rawRandomNumber: rawUintBigInt.toString(),
-                odds: wallet.odds,
-                winnerUpperTicket: upperBigInt.toString(),
-                winnerLowerTicket: lowerBigInt.toString(),
-                winnerTicketCount: rawSnapshot[id].tickets,
-            }
-           
-            updateDrawing(
+            
+            await updateDrawing(
                 drawing_id, 
                 null, 
                 id, 
                 null, 
+                vrfRequestIdBigInt.toString(),
                 rawUintBigInt.toString(),
                 winningTicket.toString(), 
                 wallet.odds, 

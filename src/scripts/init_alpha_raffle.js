@@ -1,5 +1,5 @@
-import { initializeRaffle } from './raffle.js';
-import { initializePrize } from './prize.js';
+import { initializeRaffle } from '../db/raffle.js';
+import { initializePrize } from '../db/prize.js';
 
 
 // create a raffle called Alpha Raffle v0 with Description "Testing"

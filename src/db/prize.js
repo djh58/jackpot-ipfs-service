@@ -156,16 +156,23 @@ export async function getPrize(id) {
     }
 }
 
-export async function getPrizesFromRaffle(raffle_id) {
+export async function getPrizesFromRaffle(raffle_id, without_drawings) {
     // get all prizes with that raffle_id, and sort in descending order of amount 
     try {
         await connect(); // Connect to MongoDB
+        const filters = {raffle_id: new ObjectId(raffle_id)}
+        if (without_drawings) {
+            filters.drawing_id = null;
+        }
+
         const prizes = await db.collection('prizes').find(
-            { raffle_id: new ObjectId(raffle_id) }
+            filters
         ).toArray();
 
         // Convert the string amounts to numbers for sorting
         prizes.sort((a, b) => Number(b.amount) - Number(a.amount));
+
+        
         return prizes;
 
     } catch (error) {

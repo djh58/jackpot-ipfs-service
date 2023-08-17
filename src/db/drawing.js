@@ -8,6 +8,7 @@ import { updatePrize, getPrize } from './prize.js';
  * prize_id: ObjectId
  * winner_id: ObjectId
  * ipfs_hash: str
+ * vrf_request_id: str
  * raw_random_number: str
  * winning_number: str
  * winner_odds: str
@@ -21,6 +22,7 @@ export async function initializeDrawing(
     prize_id,
     winner_id,
     ipfs_hash,
+    vrf_request_id,
     raw_random_number,
     winning_number,
     winner_odds,
@@ -43,6 +45,9 @@ export async function initializeDrawing(
         }
         if (ipfs_hash) {
             doc_to_insert.ipfs_hash = ipfs_hash;
+        }
+        if (vrf_request_id) {
+            doc_to_insert.vrf_request_id = vrf_request_id;
         }
         if (raw_random_number) {
             doc_to_insert.raw_random_number = raw_random_number;
@@ -80,6 +85,8 @@ export async function initializeDrawing(
             await updatePrize(prize_id, null, drawing_id);
         }
 
+        return res;
+
     } catch (error) {
         console.error('Error in initializeDrawing:', error);
 
@@ -94,6 +101,7 @@ export async function updateDrawing(
     prize_id,
     winner_id,
     ipfs_hash,
+    vrf_request_id,
     raw_random_number,
     winning_number,
     winner_odds,
@@ -132,6 +140,10 @@ export async function updateDrawing(
         if (ipfs_hash) {
             update_doc.ipfs_hash = ipfs_hash;
 
+        }
+
+        if (vrf_request_id) {
+            update_doc.vrf_request_id = vrf_request_id;
         }
 
         if (raw_random_number) {
@@ -188,6 +200,27 @@ export async function updateDrawing(
 
     } catch (error) {
         console.error('Error in updateDrawing:', error);
+
+    } finally {
+        await close(); // Close MongoDB connection when done
+
+    }
+
+}
+
+export async function getDrawing(id) {
+    try {
+        await connect(); // Connect to MongoDB
+
+        // convert _id to ObjectId
+        const uid = new ObjectId(id);
+        const drawing = await db.collection('drawings').findOne(
+            {_id: uid}
+        );
+        return drawing;
+
+    } catch (error) {
+        console.error('Error in getDrawing:', error);
 
     } finally {
         await close(); // Close MongoDB connection when done

@@ -6,7 +6,7 @@ import {web3StorageClient} from './client.js';
 import fs from 'fs';
 import path from 'path';
 
-async function retrieve (cid) {
+export async function retrieve (cid) {
     const client = web3StorageClient;
     const res = await client.get(cid)
     console.log(`Got a response! [${res.status}] ${res.statusText}`)
@@ -25,12 +25,5 @@ async function retrieve (cid) {
             const fileContents = await file.arrayBuffer();
             fs.writeFileSync(filePath, Buffer.from(fileContents));
         }
+    return outputDir;
   }
-
-async function main(){
-    const args = minimist(process.argv.slice(2))
-    const cid = args._[0]
-    await retrieve(cid)
-}
-
-main();

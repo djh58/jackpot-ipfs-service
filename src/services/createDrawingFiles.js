@@ -1,10 +1,33 @@
 import fs from 'fs';
 import path from 'path';
-import { config } from 'dotenv';
+import { getRaffle } from '../db/raffle.js';
+import { getPrize } from '../db/prize.js';
 
-export function createRaffleFiles(users, description) {
+export async function createDrawingFiles(users, prize_id) {
+  const prize = await getPrize(prize_id);
+  if (!prize) {
+    console.log("Prize does not exist");
+    return;
+  }
+  if (!prize.raffle_id) {
+    console.log("Prize does not have a raffle_id");
+    return;
+  }
+  const raffle = await getRaffle(prize.raffle_id);
+  if (!raffle) {
+    console.log("Raffle does not exist");
+    return;
+  }
+
+  const raffleDescription = raffle.description;
+  const raffleName = raffle.name;
+  const prizeToken = prize.token;
+  const prizeAmount = prize.amount;
+
   const timestamp = Date.now();
-  const folderName = `alpha_raffle_${timestamp}`;
+
+
+  const folderName = `drawing_${prizeToken}_${prizeAmount}_prize_${prize_id}_raffle_${raffle._id}_timestamp_${timestamp}`;
   const outputDir = path.join('out', folderName);
   fs.mkdirSync(outputDir, { recursive: true });
 
@@ -15,7 +38,12 @@ export function createRaffleFiles(users, description) {
 
   const metadata = {
     timestamp,
-    description,
+    raffleName,
+    raffleDescription,
+    prizeToken,
+    prizeAmount,
+    prizeId: prize_id,
+    raffleId: raffle._id,
     totalTickets,
     totalUserCount,
   };
@@ -33,6 +61,7 @@ export function createRaffleFiles(users, description) {
 
   const formattedWallets = formatWallets(users, totalTickets);
   fs.writeFileSync(path.join(outputDir, 'formattedWallets.json'), JSON.stringify(formattedWallets, null, 2));
+  return outputDir;
 }
 
 function formatWallets(users, totalTickets) {

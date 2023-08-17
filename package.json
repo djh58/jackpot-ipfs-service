@@ -5,7 +5,9 @@
     "description": "Get started using web3.storage in Node.js",
     "type": "module",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "initialize-raffle": "node src/scripts/init_alpha_raffle.js",
+        "setup-drawing": "node src/scripts/setup_drawing_ipfs.js",
+        "process-winner": "node src/scripts/process_winner.js"
     },
     "dependencies": {
         "dotenv": "^16.3.1",
