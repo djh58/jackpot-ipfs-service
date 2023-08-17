@@ -1,4 +1,5 @@
-import { get_all_users, connect, close } from './mongoClient.js';
+import { connect, close } from './db/mongoClient.js';
+import { get_all_users } from './db/optins.js';
 import { createRaffleFiles } from './createRaffleFiles.js';
 
 async function main() {
