@@ -1,4 +1,5 @@
 import { connect, close, db } from './mongoClient.js';
+import { ObjectId } from 'mongodb';
 export async function get_all_users(exclude_winners) {
     let users = [];
     try {
@@ -18,11 +19,34 @@ export async function get_all_users(exclude_winners) {
             users = users.filter(user => user._id.toString() !== winner_id.toString());
             }
         );
-      }
+
+      } 
+
     } catch (error) {
       console.error('Error in get_all_users:', error);
     } finally {
       await close(); // Close MongoDB connection when done
     }
     return users;
+  }
+
+
+  export async function getUser(uid) {
+    try {
+        await connect(); // Connect to MongoDB
+
+        // convert _id to ObjectId
+        const id = new ObjectId(uid);
+        const user = await db.collection('optins').findOne(
+            {_id: id}
+        );
+        return user;
+
+    } catch (error) {
+        console.error('Error in getUser:', error);
+
+    } finally {
+        await close(); // Close MongoDB connection when done
+
+    }
   }

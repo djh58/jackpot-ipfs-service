@@ -2,12 +2,12 @@ import { initializeRaffle } from '../db/raffle.js';
 import { initializePrize } from '../db/prize.js';
 
 
-// create a raffle called Alpha Raffle v0 with Description "Testing"
+// create a raffle called Alpha Raffle v0 with Description "First Official Raffle!"
 // prizes: 20 x $25 USDC and then 4 x $250 USDC and 1 x $1000 USDC
 
 async function main() {
     const RAFFLE_NAME = "Alpha Raffle v0";
-    const RAFFLE_DESCRIPTION = "Testing";
+    const RAFFLE_DESCRIPTION = "First Official Raffle!";
     const SMALL_PRIZE = {
         token: "USDC",
         amount: "25"

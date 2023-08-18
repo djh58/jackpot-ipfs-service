@@ -5,7 +5,7 @@ import { initializeDrawing } from '../db/drawing.js';
 import { getPrizesFromRaffle } from '../db/prize.js';
 async function main() {
   try {
-    const RAFFLE_ID = "64de48e1df0e3f8fea8e88b9";
+    const RAFFLE_ID = "64decbc59bec1720ae832cfd";
     const prizes = await getPrizesFromRaffle(RAFFLE_ID, true);
     if (!prizes || prizes.length === 0) {
       console.log("No prizes found");

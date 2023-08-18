@@ -1,5 +1,5 @@
 {
-    "name": "web3-storage-quickstart",
+    "name": "jackpot-ipfs-service",
     "version": "0.0.0",
     "private": true,
     "description": "Get started using web3.storage in Node.js",
@@ -7,7 +7,8 @@
     "scripts": {
         "initialize-raffle": "node src/scripts/init_alpha_raffle.js",
         "setup-drawing": "node src/scripts/setup_drawing_ipfs.js",
-        "process-winner": "node src/scripts/process_winner.js"
+        "process-winner": "node src/scripts/process_winner.js",
+        "get-winner-info": "node src/scripts/get_winner_info.js"
     },
     "dependencies": {
         "dotenv": "^16.3.1",
